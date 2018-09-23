@@ -1,8 +1,12 @@
-const contentNode = document.getElementById('contents');
-const continents = ['Africa', 'America', 'Asia', 'Australia', 'Europe'];
-const message = continents.map(c => `Hello ${c}`).join(' ');
+'use strict';
+
+var contentNode = document.getElementById('contents');
+var continents = ['Africa', 'America', 'Asia', 'Australia', 'Europe'];
+var message = continents.map(function (c) {
+  return 'Hello ' + c;
+}).join(' ');
 // var component = <h1 className="green">Hello World!</h1>; // simple JSX cmp
-const component = React.createElement(
+var component = React.createElement(
   'p',
   null,
   message
