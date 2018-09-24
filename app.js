@@ -5,6 +5,7 @@ const app = express();
 var serveIndex = require('serve-index');
 app.use('/static', serveIndex('static')); // shows you the file list
 app.use('/static', express.static('static')); // serve the actual files
+app.use('/', express.static('root'));
 
 var port = process.env.PORT || 8080;
 app.listen(port, function(){
