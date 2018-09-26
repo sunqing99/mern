@@ -10,24 +10,6 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 var contentNode = document.getElementById('contents');
 
-var issues = [{
-    id: 1,
-    status: 'Open',
-    owner: 'Ravan',
-    created: new Date('2016-08-15'),
-    effort: 5,
-    completionDate: undefined,
-    title: 'Error in console when clicking Add'
-}, {
-    id: 2,
-    status: 'Assigned',
-    owner: 'Eddie',
-    created: new Date('2016-08-16'),
-    effort: 14,
-    completionDate: new Date('2016-08-30'),
-    title: 'Missing bottom border on panel'
-}];
-
 var hdrText = 'Issue Tracker';
 var otherText = 'Some other text';
 
@@ -259,19 +241,45 @@ var IssueList = function (_React$Component4) {
         value: function loadData() {
             var _this5 = this;
 
-            setTimeout(function () {
-                _this5.setState({ issues: issues });
-            }, 500);
+            // setTimeout(() => {
+            //     this.setState({ issues: issues });
+            // }, 500);
+            fetch('/api/issues').then(function (response) {
+                return response.json();
+            }).then(function (data) {
+                console.log("Total count of records:", data._metadata.total_count);
+                data.records.forEach(function (issue) {
+                    issue.created = new Date(issue.created);
+                    if (issue.completionDate) {
+                        issue.completionDate = new Date(issue.completionDate);
+                    }
+                });
+                _this5.setState({ issues: data.records });
+            }).catch(function (err) {
+                return console.log(err);
+            });
         }
     }, {
         key: 'createIssue',
         value: function createIssue(newIssue) {
-            var newIssues = this.state.issues.slice();
-            newIssue.id = this.state.issues.length + 1;
-            newIssues.push(newIssue);
-            hdrText = 'header changed'; // will re-render
-            otherText = 'other changed'; // does not re-render
-            this.setState({ issues: newIssues });
+            var _this6 = this;
+
+            fetch('/api/issues', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(newIssue)
+            }).then(function (response) {
+                return response.json();
+            }).then(function (updatedIssue) {
+                updatedIssue.created = new Date(updatedIssue.created);
+                if (updatedIssue.completionDate) {
+                    updatedIssue.completionDate = new Date(updatedIssue.completionDate);
+                }
+                var newIssues = _this6.state.issues.concat(updatedIssue);
+                _this6.setState({ issues: newIssues });
+            }).catch(function (err) {
+                alert("Error in sending data to server: " + err.message);
+            });
         }
         // createTestIssue() {
         //     this.createIssue({
