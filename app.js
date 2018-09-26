@@ -35,7 +35,7 @@ const issues = [
     {
         id: 2,
         status: 'Assigned',
-        owner: 'Eddie',
+        owner: 'Eddie1',
         created: new Date('2016-08-16'),
         effort: 14,
         completionDate: new Date('2016-08-30'),
@@ -47,10 +47,12 @@ var serveIndex = require('serve-index');
 // app.use('/static', serveIndex('static')); // shows you the file list
 app.use('/static', express.static('static')); // serve the actual files
 app.use('/', express.static('root'));
+app.set('json spaces', 4);
 app.get('/api/issues', (req, res) => {
     const metadata = {
         total_count: issues.length
     }
+    console.log('About to send API response');
     res.json({
         _metadata: metadata,
         records: issues
@@ -66,7 +68,8 @@ app.get('/hello/:Name', (req, res) => {
         params: req.params,
     }
     console.log(JSON.stringify(selectedReqFields, null, 2));
-    res.send(`Hello World ${req.params.Name}!`);
+    const chromeVer = req.get('user-agent').replace(/.*Chrome\/([^ ]*) .*/, '$1');
+    res.send(`Hello World ${req.params.Name}, you Chrome version is ${chromeVer}`);
 });
 
 var port = process.env.PORT || 8080;
