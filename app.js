@@ -1,5 +1,8 @@
 express = require('express');
 const app = express();
+const MongoClient = require('mongodb').MongoClient;
+const MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost:27017/playground";
+let mongo_db, mongo_connection;
 
 // const stringifyReplacer = function (key, value) {
 //     if (typeof value === 'object' && value !== null) {
@@ -98,14 +101,20 @@ app.use('/static', express.static('static')); // serve the actual files
 app.use('/', express.static('root'));
 app.set('json spaces', 4);
 app.get('/api/issues', (req, res) => {
-    const metadata = {
-        total_count: issues.length
-    }
-    console.log('About to send API response');
-    res.json({
-        _metadata: metadata,
-        records: issues
-    })
+    mongo_db.collection('issues').find().toArray().then(issues => {
+        const metadata = {
+            total_count: issues.length
+        }
+        console.log('About to send API response');
+        res.json({
+            _metadata: metadata,
+            records: issues
+        })
+    }).catch(error => {
+        console.log(error);
+        res.status(500).json({ message: `Internal Server Error: ${error}` });
+    });
+
 });
 
 app.post('/api/issues', (req, res) => {
@@ -139,6 +148,15 @@ app.get('/hello/:Name', (req, res) => {
 });
 
 var port = process.env.PORT || 8080;
-app.listen(port, function () {
-    console.log('App started on port ', port);
-});
+
+
+MongoClient.connect(MONGODB_URI).then(connection => {
+    mongo_connection = connection;
+    mongo_db = mongo_connection.db(MONGODB_URI.replace(/.*\//, ''));
+    app.listen(port, function () {
+        console.log('App started on port ', port);
+    })
+}).catch(err => {
+    console.log("Error connecting to mongodb:", err)
+})
+
