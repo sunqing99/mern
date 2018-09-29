@@ -1,27 +1,7 @@
-//import {IssueAdd} from './IssueAdd.js';
 import IssueAdd from './IssueAdd.jsx';
-
-const contentNode = document.getElementById('contents');
+import IssueFilter from './IssueFilter.jsx';
 
 let hdrText = 'Issue Tracker';
-let otherText = 'Some other text';
-
-class IssueFilter extends React.Component {
-    render() {
-        return (
-            <div>This is a placeholder for the Issue Filter.</div>
-        )
-    }
-}
-
-class OtherHeader extends React.Component {
-    render() {
-        console.log(`rendering OtherHeader`);
-        return (
-            <h1 id="otherText">{otherText}</h1>
-        );
-    }
-}
 
 const IssueRow = props => (
     <tr>
@@ -35,19 +15,14 @@ const IssueRow = props => (
     </tr>
 )
 
-
 function IssueTable(props) {
     const issueRows = props.issues.map(
         issue => <IssueRow key={issue._id} issue={issue} />
     )
-    // const borderedStyle = { border: "1px solid silver", padding: 6 };
     return (
-        // <table style={{ borderCollapse: "collapse" }}>
         <table className="bordered-table">
             <thead>
                 <tr>
-                    {/* <th style={borderedStyle}>Id</th>
-                        <th style={borderedStyle}>Title</th> */}
                     <th>Id</th>
                     <th>Status</th>
                     <th>Owner</th>
@@ -64,21 +39,16 @@ function IssueTable(props) {
     )
 }
 
-class IssueList extends React.Component {
+export default class IssueList extends React.Component {
     constructor() {
         super();
         this.state = { issues: [] };
         this.createIssue = this.createIssue.bind(this);
-        // this.createTestIssue = this.createTestIssue.bind(this);
-        // setTimeout(this.createTestIssue, 3000);
     }
     componentDidMount() {
         this.loadData();
     }
     loadData() {
-        // setTimeout(() => {
-        //     this.setState({ issues: issues });
-        // }, 500);
 
         fetch('/api/issues').then(response => {
             if (response.ok) {
@@ -125,43 +95,17 @@ class IssueList extends React.Component {
             alert("Error in sending data to server: " + err.message);
         })
     }
-    // createTestIssue() {
-    //     this.createIssue({
-    //         status: 'New',
-    //         owner: 'Pieta',
-    //         created: new Date(),
-    //         title: 'Completion date should be optional',
-    //     });
-    // }
+
     render() {
         return (
-            <BorderWrap>
+            <div>
                 <h1 id="hdr">{hdrText}</h1>
                 <IssueFilter />
                 <hr />
                 <IssueTable issues={this.state.issues} />
-                {/* <IssueTable issues={this.state.issues} /> */}
-                {/* <button onClick={this.createTestIssue}>Add</button> */}
                 <hr />
                 <IssueAdd createIssue={this.createIssue} />
-            </BorderWrap>
+            </div>
         );
     }
 }
-
-class BorderWrap extends React.Component {
-    render() {
-        const borderStyle = { border: "1px solid blue", padding: 6 };
-        return (
-            <div style={borderStyle}>
-                {this.props.children}
-            </div>
-        )
-    }
-}
-ReactDOM.render(
-    <div>
-        <OtherHeader />
-        <IssueList />
-    </div>,
-    contentNode);

@@ -1,4 +1,4 @@
-express = require('express');
+const express = require('express');
 const app = express();
 const MongoClient = require('mongodb').MongoClient;
 const Issue = require('./issue');
@@ -6,31 +6,10 @@ const Issue = require('./issue');
 const MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost:27017/playground";
 let mongo_db, mongo_connection;
 
-// const stringifyReplacer = function (key, value) {
-//     if (typeof value === 'object' && value !== null) {
-//         if (cache.indexOf(value) !== -1) {
-//             // Duplicate reference found
-//             try {
-//                 // If this value does not reference a parent it can be deduped
-//                 return JSON.parse(JSON.stringify(value));
-//             } catch (error) {
-//                 // discard key if value cannot be deduped
-//                 return;
-//             }
-//         }
-//         // Store value in our collection
-//         cache.push(value);
-//     }
-//     return value;
-// }
-// let cache = []; 
-
 app.use(express.static('static'));
 
 const bodyParser = require('body-parser');
-var serveIndex = require('serve-index');
 
-// app.use('/static', serveIndex('static')); // shows you the file list
 app.use(bodyParser.json());
 app.use((err, req, res, next) => {
     if (err) {
@@ -40,8 +19,7 @@ app.use((err, req, res, next) => {
         next()
     }
 })
-app.use('/static', express.static('static')); // serve the actual files
-app.use('/', express.static('root'));
+app.use(express.static('static')); // serve the actual files
 app.set('json spaces', 4);
 app.get('/api/issues', (req, res) => {
     mongo_db.collection('issues').find().toArray().then(issues => {
@@ -83,22 +61,7 @@ app.post('/api/issues', (req, res) => {
 
 });
 
-app.get('/hello/:Name', (req, res) => {
-    let selectedReqFields = {
-        query: req.query,
-        header: req.headers,
-        path: req.path,
-        url: req.url,
-        body: req.body,
-        params: req.params,
-    }
-    console.log(JSON.stringify(selectedReqFields, null, 2));
-    const chromeVer = req.get('user-agent').replace(/.*Chrome\/([^ ]*) .*/, '$1');
-    res.send(`Hello World ${req.params.Name}, you Chrome version is ${chromeVer}`);
-});
-
 var port = process.env.PORT || 8080;
-
 
 MongoClient.connect(MONGODB_URI, { useNewUrlParser: true }).then(connection => {
     mongo_connection = connection;

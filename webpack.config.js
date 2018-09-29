@@ -1,7 +1,7 @@
 const path = require('path');
 module.exports = {
     mode: 'production',
-    entry: './src/IssueTracker.jsx',
+    entry: './src/App.jsx',
     output: {
         path: path.resolve(__dirname, 'static'),
         filename: 'app.bundle.js'
