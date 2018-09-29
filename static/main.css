@@ -1,7 +1,8 @@
-.red {
-    color: red
-}
 
-.green {
-    color: green
+table.bordered-table th, td {
+    border: 1px solid silver;
+    padding: 4px;
+}
+table.bordered-table {
+    border-collapse: collapse
 }
