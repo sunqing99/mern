@@ -1,3 +1,6 @@
+//import {IssueAdd} from './IssueAdd.js';
+import IssueAdd from './IssueAdd.jsx';
+
 const contentNode = document.getElementById('contents');
 
 let hdrText = 'Issue Tracker';
@@ -61,37 +64,6 @@ function IssueTable(props) {
     )
 }
 
-class IssueAdd extends React.Component {
-    constructor() {
-        super();
-        this.handleSubmit = this.handleSubmit.bind(this);
-    }
-    handleSubmit(e) {
-        e.preventDefault();
-        let form = document.forms.issueAdd;
-        this.props.createIssue({
-            owner: form.owner.value,
-            title: form.title.value,
-            status: 'New',
-            created: new Date(),
-        });
-        // clear the form for the next input
-        form.owner.value = "";
-        form.title.value = "";
-    }
-    render() {
-        console.log('Rendering IssueAdd')
-        return (
-            <div>
-                <form name="issueAdd" onSubmit={this.handleSubmit}>
-                    <input type="text" name="owner" placeholder="Owner" />
-                    <input type="text" name="title" placeholder="Title" />
-                    <button>Add</button>
-                </form>
-            </div>
-        )
-    }
-}
 class IssueList extends React.Component {
     constructor() {
         super();
