@@ -1,10 +1,24 @@
 const path = require('path');
 module.exports = {
     mode: 'production',
-    entry: './src/App.jsx',
+    entry: {
+        app: './src/App.jsx',
+        vendor: ['react', 'react-dom', 'whatwg-fetch'],
+    },
     output: {
         path: path.resolve(__dirname, 'static'),
-        filename: 'app.bundle.js'
+        filename: '[name].bundle.js'
+    },
+    optimization: {
+        splitChunks: {
+            cacheGroups: {
+                vendor: {
+                    test: /[\\/]node_modules[\\/](react|react-dom|whatwg-fetch)[\\/]/,
+                    name: 'vendor',
+                    chunks: 'all',
+                }
+            }
+        }
     },
     module: {
         rules: [
