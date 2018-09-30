@@ -1,7 +1,7 @@
 // check out https://stackoverflow.com/questions/48985780/webpack-4-create-vendor-chunk/48986526#48986526
 const path = require('path');
 module.exports = {
-    mode: 'production',
+    mode: 'none',
     entry: {
         app: './src/App.jsx',
         vendor: ['react', 'react-dom', 'whatwg-fetch', 'babel-polyfill'],
@@ -35,5 +35,14 @@ module.exports = {
                 },
             },
         ]
+    },
+    devServer: {
+        port: 8000,
+        contentBase: 'static',
+        proxy: {
+            '/api/*': {
+                target: 'http://localhost:8080'
+            }
+        }
     }
 };

@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node server/server.js",
     "compile": "webpack",
-    "watch": "webpack --watch",
+    "watch": "webpack-dev-server --hot --inline",
     "dev": "nodemon -w server server/server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -32,6 +32,7 @@
     "react-dom": "^16.5.2",
     "webpack": "^4.20.2",
     "webpack-cli": "^3.1.1",
+    "webpack-dev-server": "^3.1.9",
     "whatwg-fetch": "^3.0.0"
   }
 }
