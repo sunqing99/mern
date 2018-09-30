@@ -39,13 +39,8 @@ module.exports = {
             },
         ]
     },
-    devServer: {
-        port: 8000,
-        contentBase: 'static',
-        proxy: {
-            '/api/*': {
-                target: 'http://localhost:8080'
-            }
-        }
-    }
+    // see https://github.com/webpack/webpack/issues/3486#issuecomment-267599683
+    performance: {
+        hints: process.env.NODE_ENV === 'production' ? "warning" : false
+    },
 };
