@@ -21,6 +21,19 @@ app.use((err, req, res, next) => {
 })
 app.use(express.static('static')); // serve the actual files
 app.set('json spaces', 4);
+console.log (`NODE_ENV is ${process.env.NODE_ENV}`);
+if (process.env.NODE_ENV !== 'production') {
+    const webpack = require('webpack');
+    const webpackDevMiddleware = require('webpack-dev-middleware');
+    const webpackHotMiddleware = require('webpack-hot-middleware');
+    const config = require('../webpack.config');
+    config.entry.app.push('webpack-hot-middleware/client', 'webpack/hot/only-dev-server');
+    config.plugins.push(new webpack.HotModuleReplacementPlugin());
+    const bundler = webpack(config);
+    app.use(webpackDevMiddleware(bundler, {noInfo: true}));
+    app.use(webpackHotMiddleware(bundler, {log: console.log}));
+}
+
 app.get('/api/issues', (req, res) => {
     mongo_db.collection('issues').find().toArray().then(issues => {
         const metadata = {
