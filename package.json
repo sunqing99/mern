@@ -7,6 +7,7 @@
     "start": "node dist/server.js",
     "compile": "webpack",
     "dev": "nodemon -w server server/start_hook.js",
+    "lint": "eslint --ext js,jsx src server webpack.config.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "compile-server": "babel server --presets es2015-node --out-dir dist --source-maps",
     "watch-server": "babel server --presets es2015-node --out-dir dist --source-maps --watch",
@@ -18,13 +19,17 @@
   "license": "MIT",
   "dependencies": {
     "async": "^2.6.1",
+    "babel-polyfill": "^6.26.0",
     "body-parser": "^1.18.3",
     "co": "^4.6.0",
     "express": "^4.16.3",
     "mongodb": "^3.1.6",
+    "prop-types": "^15.6.2",
+    "react": "^16.5.2",
+    "react-dom": "^16.5.2",
     "serve-index": "^1.9.1",
     "source-map-support": "^0.5.9",
-    "babel-polyfill": "^6.26.0"
+    "whatwg-fetch": "^3.0.0"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
@@ -34,14 +39,16 @@
     "babel-preset-es2015-node": "^6.1.1",
     "babel-preset-react": "^6.24.1",
     "babel-register": "^6.26.0",
+    "eslint": "^5.6.1",
+    "eslint-config-airbnb": "^17.1.0",
+    "eslint-plugin-import": "^2.14.0",
+    "eslint-plugin-jsx-a11y": "^6.1.1",
+    "eslint-plugin-react": "^7.11.1",
     "nodemon": "^1.18.4",
-    "react": "^16.5.2",
-    "react-dom": "^16.5.2",
     "webpack": "^4.20.2",
     "webpack-cli": "^3.1.1",
     "webpack-dev-middleware": "^3.4.0",
     "webpack-dev-server": "^3.1.9",
-    "webpack-hot-middleware": "^2.24.2",
-    "whatwg-fetch": "^3.0.0"
+    "webpack-hot-middleware": "^2.24.2"
   }
 }
