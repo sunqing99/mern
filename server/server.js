@@ -8,7 +8,7 @@ import Issue from './issue';
 const app = express();
 SourceMapSupport.install();
 
-const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/issues';
+const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/playground';
 let mongoDb;
 let mongoConnection;
 
@@ -42,8 +42,11 @@ if (process.env.NODE_ENV !== 'production') {
 /* eslint-enable global-require, import/no-extraneous-dependencies */
 
 app.get('/api/issues', (req, res) => {
+  console.log(JSON.stringify(req.query, null, 2));
+  const filter = {};
+  if (req.query.status) filter.status = req.query.status;
   mongoDb.collection('issues')
-    .find()
+    .find(filter)
     .toArray()
     .then((issues) => {
       const metadata = {
