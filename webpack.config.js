@@ -5,7 +5,7 @@ module.exports = {
   mode: 'production',
   entry: {
     app: ['./src/App.jsx'],
-    vendor: ['react', 'react-dom', 'whatwg-fetch', 'babel-polyfill'],
+    vendor: ['react', 'react-dom', 'react-router-dom', 'whatwg-fetch', 'babel-polyfill'],
   },
   output: {
     path: path.resolve(__dirname, 'static'),
