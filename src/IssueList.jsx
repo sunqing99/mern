@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import 'whatwg-fetch';
 
 import IssueAdd from './IssueAdd';
@@ -12,7 +13,7 @@ const IssueRow = ({ issue }) => { // eslint-disable-line react/prop-types
   } = issue;
   return (
     <tr>
-      <td>{_id}</td>
+      <td><Link to={`/issues/${_id}`}>{_id.substr(-4)}</Link></td>
       <td>{status}</td>
       <td>{owner}</td>
       <td>{created.toDateString()}</td>
