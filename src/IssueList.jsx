@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import 'whatwg-fetch';
 
@@ -7,7 +8,7 @@ import IssueFilter from './IssueFilter';
 
 const hdrText = 'Issue Tracker';
 
-const IssueRow = ({ issue }) => { // eslint-disable-line react/prop-types
+const IssueRow = ({ issue }) => {
   const {
     _id, status, owner, created, effort, completionDate, title,
   } = issue;
@@ -24,7 +25,11 @@ const IssueRow = ({ issue }) => { // eslint-disable-line react/prop-types
   );
 };
 
-function IssueTable({ issues }) { // eslint-disable-line react/prop-types
+IssueRow.propTypes = {
+  issue: PropTypes.shape({ _id: PropTypes.string }).isRequired,
+};
+
+function IssueTable({ issues }) {
   const issueRows = issues.map(
     issue => <IssueRow key={issue._id} issue={issue} />,
   );
@@ -47,6 +52,10 @@ function IssueTable({ issues }) { // eslint-disable-line react/prop-types
     </table>
   );
 }
+
+IssueTable.propTypes = {
+  issues: PropTypes.arrayOf(PropTypes.shape({ _id: PropTypes.string })).isRequired,
+};
 
 export default class IssueList extends React.Component {
   constructor() {
