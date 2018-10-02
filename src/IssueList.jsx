@@ -65,21 +65,29 @@ export default class IssueList extends React.Component {
     this.createIssue = this.createIssue.bind(this);
   }
 
+  static get propTypes() {
+    return {
+      location: PropTypes.shape({ search: PropTypes.string.isRequired }).isRequired,
+    };
+  }
+
   componentDidMount() {
     this.loadData();
   }
 
   componentDidUpdate(prevProps) {
-    const oldQuery = prevProps.location.search;
-    const newQuery = this.props.location.search;
-    if (!oldQuery || !newQuery || oldQuery === newQuery) {
+    const { location } = this.props;
+    const oldQuery = queryString.parse(prevProps.location.search);
+    const newQuery = queryString.parse(location.search);
+    if (oldQuery.status === newQuery.status) {
       return;
     }
     this.loadData();
   }
 
   loadData() {
-    fetch(`/api/issues${this.props.location.search}`).then((response) => {
+    const { location } = this.props;
+    fetch(`/api/issues${location.search}`).then((response) => {
       if (response.ok) {
         response.json().then((data) => {
           // console.log("Total count of records:", data._metadata.total_count);
