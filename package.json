@@ -13,7 +13,8 @@
     "watch-server": "babel server --presets es2015-node --out-dir dist --source-maps --watch",
     "watch": "webpack-dev-server --hot --inline",
     "dev-all": "npm run watch & npm run watch-server & npm start",
-    "devold": "nodemon -w server dist/server.js"
+    "devold": "nodemon -w server dist/server.js",
+    "compile-all": "npm run compile-server & npm run compile"
   },
   "author": "Qing Sun <sunq99@gmail.com>",
   "license": "MIT",
