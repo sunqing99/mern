@@ -146,7 +146,6 @@ export default class IssueList extends React.Component {
     const { issues } = this.state;
     return (
       <div>
-        <h1 id="hdr">{hdrText}</h1>
         <IssueFilter setFilter={this.setFilter} />
         <hr />
         <IssueTable issues={issues} />
