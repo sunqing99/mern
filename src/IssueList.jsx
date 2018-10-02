@@ -63,11 +63,13 @@ export default class IssueList extends React.Component {
     super();
     this.state = { issues: [] };
     this.createIssue = this.createIssue.bind(this);
+    this.setFilter = this.setFilter.bind(this);
   }
 
   static get propTypes() {
     return {
       location: PropTypes.shape({ search: PropTypes.string.isRequired }).isRequired,
+      history: PropTypes.shape({ length: PropTypes.number }).isRequired,
     };
   }
 
@@ -83,6 +85,11 @@ export default class IssueList extends React.Component {
       return;
     }
     this.loadData();
+  }
+
+  setFilter(search) {
+    const { history, location: { pathname } } = this.props;
+    history.push({ pathname, search });
   }
 
   loadData() {
@@ -140,7 +147,7 @@ export default class IssueList extends React.Component {
     return (
       <div>
         <h1 id="hdr">{hdrText}</h1>
-        <IssueFilter />
+        <IssueFilter setFilter={this.setFilter} />
         <hr />
         <IssueTable issues={issues} />
         <hr />
