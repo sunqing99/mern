@@ -7,8 +7,6 @@ import 'whatwg-fetch';
 import IssueAdd from './IssueAdd';
 import IssueFilter from './IssueFilter';
 
-const hdrText = 'Issue Tracker';
-
 const IssueRow = ({ issue }) => {
   const {
     _id, status, owner, created, effort, completionDate, title,

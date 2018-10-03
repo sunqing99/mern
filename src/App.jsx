@@ -2,7 +2,7 @@ import 'babel-polyfill';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import {
-  HashRouter as Router, Route, Switch, Redirect, withRouter,
+  BrowserRouter as Router, Route, Switch, Redirect, withRouter,
 } from 'react-router-dom';
 import IssueList from './IssueList';
 import IssueEdit from './IssueEdit';

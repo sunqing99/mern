@@ -3,6 +3,7 @@ import 'babel-polyfill';
 import express from 'express';
 import { MongoClient } from 'mongodb';
 import bodyParser from 'body-parser';
+import path from 'path';
 import Issue from './issue';
 
 const app = express();
@@ -89,6 +90,10 @@ app.post('/api/issues', (req, res) => {
       res.status(500)
         .json({ message: `Internal Server Error: ${error}` });
     });
+});
+
+app.get('*', (req, res) => {
+  res.sendFile(path.resolve('static/index.html'));
 });
 
 const port = process.env.PORT || 8080;

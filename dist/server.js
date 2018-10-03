@@ -16,6 +16,10 @@ var _bodyParser = require('body-parser');
 
 var _bodyParser2 = _interopRequireDefault(_bodyParser);
 
+var _path = require('path');
+
+var _path2 = _interopRequireDefault(_path);
+
 var _issue = require('./issue');
 
 var _issue2 = _interopRequireDefault(_issue);
@@ -94,6 +98,10 @@ app.post('/api/issues', (req, res) => {
     console.log(error);
     res.status(500).json({ message: `Internal Server Error: ${error}` });
   });
+});
+
+app.get('*', (req, res) => {
+  res.sendFile(_path2.default.resolve('static/index.html'));
 });
 
 const port = process.env.PORT || 8080;
