@@ -79,15 +79,17 @@ export default class IssueList extends React.Component {
     const { location } = this.props;
     const oldQuery = queryString.parse(prevProps.location.search);
     const newQuery = queryString.parse(location.search);
-    if (oldQuery.status === newQuery.status) {
+    if (oldQuery.status === newQuery.status
+      && oldQuery.effort_gte === newQuery.effort_gte
+      && oldQuery.effort_lte === newQuery.effort_lte) {
       return;
     }
     this.loadData();
   }
 
-  setFilter(search) {
+  setFilter(query) {
     const { history, location: { pathname } } = this.props;
-    history.push({ pathname, search });
+    history.push({ pathname, search: queryString.stringify(query) });
   }
 
   loadData() {
@@ -142,9 +144,11 @@ export default class IssueList extends React.Component {
 
   render() {
     const { issues } = this.state;
+    const { location: { search } } = this.props;
+    const initFilter = queryString.parse(search);
     return (
       <div>
-        <IssueFilter setFilter={this.setFilter} />
+        <IssueFilter setFilter={this.setFilter} initFilter={initFilter} />
         <hr />
         <IssueTable issues={issues} />
         <hr />
