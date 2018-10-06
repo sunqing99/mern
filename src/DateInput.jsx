@@ -7,11 +7,22 @@ export default class DateInput extends React.Component {
   }
 
   static editFormat(date) {
-    return (date != null) ? date.toISOString().substr(0, 10) : '';
+    // below will result in UTC, we want local
+    // return (date != null) ? date.toISOString().substr(0, 10) : '';
+    if (date === null) return '';
+    const [month, day, year] = date.toLocaleDateString().split('/');
+    let [m, d] = [month, day];
+    if (month.length === 1) m = `0${month}`;
+    if (day.length === 1) d = `0${day}`;
+    return `${year}-${m}-${d}`;
   }
 
   static unformat(str) {
-    const val = new Date(str);
+    // for yyyy-mm-dd format UTC will be assumed, so need to add time
+    // see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/parse#ECMAScript_5_ISO-8601_format_support
+    let dateStr = str;
+    if (str.match(/^\d{4}-\d{2}-\d{2}$/)) dateStr = `${str}T00:00:00`;
+    const val = new Date(dateStr);
     return Number.isNaN(val.getTime()) ? null : val;
   }
 
@@ -44,10 +55,14 @@ export default class DateInput extends React.Component {
     };
   }
 
-  componentWillReceiveProps(newProps) {
-    const { value: oldPropValue } = this.props;
-    if (newProps.value !== oldPropValue) {
-      this.setState({ value: DateInput.editFormat(newProps.value) });
+  componentDidUpdate(oldProps) {
+    const { value: newPropValue } = this.props;
+    if (oldProps.value !== newPropValue) {
+      /* eslint-disable react/no-did-update-set-state */
+      // should be fine to call if-wrapped setState() and ignore lint warning
+      // see https://github.com/airbnb/javascript/issues/1875
+      this.setState({ value: DateInput.editFormat(newPropValue) });
+      /* eslint-enable react/no-did-update-set-state */
     }
   }
 
