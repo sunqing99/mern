@@ -10,6 +10,7 @@ const app = express();
 SourceMapSupport.install();
 
 const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/playground';
+const COLLECTION = 'issues';
 let mongoDb;
 let mongoConnection;
 
@@ -49,7 +50,7 @@ app.get('/api/issues', (req, res) => {
   if (req.query.effort_lte || req.query.effort_gte) filter.effort = {};
   if (req.query.effort_lte) filter.effort.$lte = parseInt(req.query.effort_lte, 10);
   if (req.query.effort_gte) filter.effort.$gte = parseInt(req.query.effort_gte, 10);
-  mongoDb.collection('issues')
+  mongoDb.collection(COLLECTION)
     .find(filter)
     .toArray()
     .then((issues) => {
@@ -75,7 +76,7 @@ app.get('/api/issues/:id', (req, res) => {
   } catch (error) {
     res.status(422).json({ message: `Invalid issue ID format: ${error}` });
   }
-  mongoDb.collection('issues')
+  mongoDb.collection(COLLECTION)
     .find({ _id: issueId })
     .limit(1)
     .next()
@@ -86,6 +87,40 @@ app.get('/api/issues/:id', (req, res) => {
     .catch((error) => {
       console.log(error);
       res.status(500).json({ message: `Internal Server Error: ${error}` });
+    });
+});
+
+app.put('/api/issues/:id', (req, res) => {
+  let issueId;
+  try {
+    issueId = new ObjectId(req.params.id);
+  } catch (error) {
+    res.status(422).json({ message: `Invalid issue id format: ${error}` });
+    return;
+  }
+
+  const issue = req.body;
+  delete issue._id;
+  const err = Issue.validateIssue(issue);
+  if (err) {
+    res.status(422).json({ message: `Invalid request ${err}` });
+    return;
+  }
+
+  mongoDb.collection(COLLECTION)
+    .update({ _id: issueId }, Issue.convertIssue(issue))
+    .then(() => (
+      mongoDb.collection(COLLECTION)
+        .find({ _id: issueId })
+        .limit(1)
+        .next()
+    ))
+    .then((savedIssue) => {
+      res.json(savedIssue);
+    })
+    .catch((error) => {
+      console.log(error);
+      res.status(500).json({ message: `Internal Server Error ${error}` });
     });
 });
 
@@ -100,9 +135,9 @@ app.post('/api/issues', (req, res) => {
     res.status(422).json({ message: `Invalid request: ${err}` });
     return;
   }
-  mongoDb.collection('issues')
+  mongoDb.collection(COLLECTION)
     .insertOne(Issue.cleanupIssue(newIssue))
-    .then(result => mongoDb.collection('issues')
+    .then(result => mongoDb.collection(COLLECTION)
       .find({ _id: result.insertedId })
       .limit(1)
       .next())
