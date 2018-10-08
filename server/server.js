@@ -108,7 +108,7 @@ app.put('/api/issues/:id', (req, res) => {
   }
 
   mongoDb.collection(COLLECTION)
-    .update({ _id: issueId }, Issue.convertIssue(issue))
+    .updateOne({ _id: issueId }, { $set: Issue.convertIssue(issue) })
     .then(() => (
       mongoDb.collection(COLLECTION)
         .find({ _id: issueId })
