@@ -31,6 +31,15 @@ export default class NumInput extends React.Component {
     };
   }
 
+  componentDidUpdate(oldProps) {
+    const { value: newValue } = this.props;
+    if (oldProps.value !== newValue) {
+      /* eslint-disable react/no-did-update-set-state */
+      this.setState({ value: NumInput.format(newValue) });
+      /* eslint-enable react/no-did-update-set-state */
+    }
+  }
+
   onBlur(e) {
     const { onChange: parentOnChange } = this.props;
     const { value: strValue } = this.state;
