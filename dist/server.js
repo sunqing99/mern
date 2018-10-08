@@ -144,6 +144,23 @@ app.post('/api/issues', (req, res) => {
   });
 });
 
+app.delete('/api/issues/:id', (req, res) => {
+  let issueId;
+  try {
+    issueId = new _mongodb.ObjectId(req.params.id);
+  } catch (error) {
+    res.status(422).json({ message: `Invalid issue ID format: ${error}` });
+    return;
+  }
+
+  mongoDb.collection(COLLECTION).deleteOne({ _id: issueId }).then(deleteResult => {
+    if (deleteResult.result.n === 1) res.json({ status: 'OK' });else res.json({ status: 'Warmning: object not found' });
+  }).catch(error => {
+    console.log(error);
+    res.status(500).json({ message: `Internal Server Error: ${error}` });
+  });
+});
+
 app.get('*', (req, res) => {
   res.sendFile(_path2.default.resolve('static/index.html'));
 });
