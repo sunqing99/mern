@@ -26,7 +26,7 @@ const App = () => (
     </div>
     <Main />
     <div className="footer">
-      Full source code available at this <a href="https://github.com/sunqing99/mern/tree/chap8">GitHub repository</a>
+      Full source code available at this <a href="https://github.com/sunqing99/mern/tree/chap9">GitHub repository</a>
     </div>
   </div>
 );
