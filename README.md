@@ -1,0 +1,1 @@
+- bootstrap latest is 4.x but glyphicons are not available in 4.x so downgraded to latest 3.x (see [this page](http://v4-alpha.getbootstrap.com/migration/#components))

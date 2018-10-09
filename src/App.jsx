@@ -20,7 +20,7 @@ const Main = () => (
 );
 
 const App = () => (
-  <div>
+  <div className="container-fluid">
     <div className="header">
       <h1>Issue Tracker</h1>
     </div>

@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import queryString from 'query-string';
+import { Button, Glyphicon } from 'react-bootstrap';
 import 'whatwg-fetch';
 
 import IssueAdd from './IssueAdd';
@@ -25,7 +26,9 @@ const IssueRow = ({ issue, deleteIssue }) => {
       <td>{effort}</td>
       <td>{completionDate ? completionDate.toDateString() : 'Not completed'}</td>
       <td>{title}</td>
-      <td><button type="button" onClick={onDeleteClick}>Delete</button></td>
+      <td>
+        <Button bsSize="xsmall" onClick={onDeleteClick}><Glyphicon glyph="trash" /></Button>
+      </td>
     </tr>
   );
 };
