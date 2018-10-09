@@ -117,7 +117,7 @@ app.put('/api/issues/:id', (req, res) => {
     return;
   }
 
-  mongoDb.collection(COLLECTION).update({ _id: issueId }, _issue2.default.convertIssue(issue)).then(() => mongoDb.collection(COLLECTION).find({ _id: issueId }).limit(1).next()).then(savedIssue => {
+  mongoDb.collection(COLLECTION).updateOne({ _id: issueId }, { $set: _issue2.default.convertIssue(issue) }).then(() => mongoDb.collection(COLLECTION).find({ _id: issueId }).limit(1).next()).then(savedIssue => {
     res.json(savedIssue);
   }).catch(error => {
     console.log(error);
