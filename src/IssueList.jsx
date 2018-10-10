@@ -2,7 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import queryString from 'query-string';
-import { Button, Glyphicon } from 'react-bootstrap';
+import {
+  Button, Glyphicon, Table, Panel,
+} from 'react-bootstrap';
 import 'whatwg-fetch';
 
 import IssueAdd from './IssueAdd';
@@ -43,7 +45,7 @@ function IssueTable({ issues, deleteIssue }) {
     issue => <IssueRow key={issue._id} issue={issue} deleteIssue={deleteIssue} />,
   );
   return (
-    <table className="bordered-table">
+    <Table bordered condensed hover responsive>
       <thead>
         <tr>
           <th>Id</th>
@@ -59,7 +61,7 @@ function IssueTable({ issues, deleteIssue }) {
       <tbody>
         {issueRows}
       </tbody>
-    </table>
+    </Table>
   );
 }
 
@@ -170,10 +172,19 @@ export default class IssueList extends React.Component {
     const initFilter = queryString.parse(search);
     return (
       <div>
-        <IssueFilter setFilter={this.setFilter} initFilter={initFilter} />
-        <hr />
+        <Panel id="collapsible-panel">
+          <Panel.Heading>
+            <Panel.Title toggle>
+              Filter
+            </Panel.Title>
+          </Panel.Heading>
+          <Panel.Collapse>
+            <Panel.Body>
+              <IssueFilter setFilter={this.setFilter} initFilter={initFilter} />
+            </Panel.Body>
+          </Panel.Collapse>
+        </Panel>
         <IssueTable issues={issues} deleteIssue={this.deleteIssue} />
-        <hr />
         <IssueAdd createIssue={this.createIssue} />
       </div>
     );
