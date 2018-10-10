@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {
-  Col, Row, FormGroup, FormControl, ControlLabel, InputGroup, ButtonToolbar, Button,
+  Col, Row, FormGroup, FormControl, ControlLabel, InputGroup, ButtonToolbar, ButtonGroup, Button,
 } from 'react-bootstrap';
 
 export default class IssueFilter extends React.Component {
@@ -123,9 +123,11 @@ export default class IssueFilter extends React.Component {
           <FormGroup>
             <ControlLabel>&nbsp;</ControlLabel>
             <ButtonToolbar>
-              <Button bsStyle="primary" onClick={this.applyFilter}>Apply</Button>
-              <Button onClick={this.resetFilter} disabled={!changed}>Reset</Button>
-              <Button onClick={this.clearFilter}>Clear</Button>
+              <ButtonGroup bsSize="small">
+                <Button bsStyle="primary" onClick={this.applyFilter}>Apply</Button>
+                <Button onClick={this.resetFilter} disabled={!changed}>Reset</Button>
+                <Button onClick={this.clearFilter}>Clear</Button>
+              </ButtonGroup>
             </ButtonToolbar>
           </FormGroup>
         </Col>
