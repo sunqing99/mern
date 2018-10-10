@@ -12,7 +12,7 @@ module.exports = {
       'react-bootstrap',
       'react-router-bootstrap',
       'whatwg-fetch',
-      'babel-polyfill'
+      'babel-polyfill',
     ],
   },
   output: {
