@@ -95,17 +95,15 @@ export default class DateInput extends React.Component {
       value: stateValue,
     } = this.state;
     const {
-      name: propsName,
       value: propsValue,
     } = this.props;
-    const className = (!stateValid && !stateFocused) ? 'invalid' : null;
     const value = (stateFocused || !stateValid) ? stateValue : DateInput.displayFormat(propsValue);
+    const childPros = Object.assign({}, this.props);
+    delete childPros.onValidityChange;
     return (
       <input
         type="text"
-        size={20}
-        name={propsName}
-        className={className}
+        {...childPros}
         value={value}
         placeholder={stateFocused ? 'yyyy-mm-dd' : null}
         onFocus={this.onFocus}
