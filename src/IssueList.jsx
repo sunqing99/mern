@@ -9,6 +9,7 @@ import 'whatwg-fetch';
 
 import IssueAdd from './IssueAdd';
 import IssueFilter from './IssueFilter';
+import Toast from './Toast';
 
 const IssueRow = ({ issue, deleteIssue }) => {
   const {
@@ -73,10 +74,17 @@ IssueTable.propTypes = {
 export default class IssueList extends React.Component {
   constructor() {
     super();
-    this.state = { issues: [] };
+    this.state = {
+      issues: [],
+      toastVisible: false,
+      toastMessage: '',
+      toastType: 'success',
+    };
     this.createIssue = this.createIssue.bind(this);
     this.setFilter = this.setFilter.bind(this);
     this.deleteIssue = this.deleteIssue.bind(this);
+    this.showError = this.showError.bind(this);
+    this.dismissToast = this.dismissToast.bind(this);
   }
 
   static get propTypes() {
@@ -123,11 +131,11 @@ export default class IssueList extends React.Component {
         });
       } else {
         response.json().then((error) => {
-          alert(`Failed to fetch issues: ${error.message}`);
+          this.showError(`Failed to fetch issues: ${error.message}`);
         });
       }
     }).catch((error) => {
-      alert(`Error in fetch data from server: ${error}`);
+      this.showError(`Error in fetch data from server: ${error}`);
     });
   }
 
@@ -149,25 +157,39 @@ export default class IssueList extends React.Component {
         });
       } else {
         response.json().then((error) => {
-          alert(`Failed to add issue: ${error.message}`);
+          this.showError(`Failed to add issue: ${error.message}`);
         });
       }
     }).catch((err) => {
-      alert(`Error in sending data to server: ${err.message}`);
+      this.showError(`Error in sending data to server: ${err.message}`);
     });
   }
 
   deleteIssue(id) {
     fetch(`/api/issues/${id}`, { method: 'DELETE' }).then((response) => {
-      if (!response.ok) alert('Failed to delete issue');
+      if (!response.ok) this.showError('Failed to delete issue');
       else this.loadData();
     }).catch((err) => {
-      alert(`Error in sending data to server: ${err.message}`);
+      this.showError(`Error in sending data to server: ${err.message}`);
     });
   }
 
+  showError(message) {
+    this.setState({
+      toastVisible: true,
+      toastMessage: message,
+      toastType: 'danger',
+    });
+  }
+
+  dismissToast() {
+    this.setState({ toastVisible: false });
+  }
+
   render() {
-    const { issues } = this.state;
+    const {
+      issues, toastVisible, toastType, toastMessage,
+    } = this.state;
     const { location: { search } } = this.props;
     const initFilter = queryString.parse(search);
     return (
@@ -186,6 +208,12 @@ export default class IssueList extends React.Component {
         </Panel>
         <IssueTable issues={issues} deleteIssue={this.deleteIssue} />
         <IssueAdd createIssue={this.createIssue} />
+        <Toast
+          showing={toastVisible}
+          bsStyle={toastType}
+          message={toastMessage}
+          onDismiss={this.dismissToast}
+        />
       </div>
     );
   }
