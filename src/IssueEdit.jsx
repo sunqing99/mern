@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {
-  FormGroup, FormControl, ControlLabel, ButtonToolbar, Button, Panel, Form, Col,
+  FormGroup, FormControl, ControlLabel, ButtonToolbar, Button, Panel, Form, Col, Alert,
 } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
 
@@ -22,10 +22,13 @@ export default class IssueEdit extends React.Component {
         created: null,
       },
       invalidFields: {},
+      showingValidation: false,
     };
     this.onChange = this.onChange.bind(this);
     this.onValidityChange = this.onValidityChange.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
+    this.dismissValidation = this.dismissValidation.bind(this);
+    this.showValidation = this.showValidation.bind(this);
   }
 
   static get propTypes() {
@@ -68,6 +71,7 @@ export default class IssueEdit extends React.Component {
     const { invalidFields, issue } = this.state;
     const { match: { params: { id } } } = this.props;
     event.preventDefault();
+    this.showValidation();
     if (Object.keys(invalidFields).length !== 0) {
       return;
     }
@@ -115,11 +119,25 @@ export default class IssueEdit extends React.Component {
     });
   }
 
+  showValidation() {
+    this.setState({ showingValidation: true });
+  }
+
+  dismissValidation() {
+    this.setState({ showingValidation: false });
+  }
+
   render() {
-    const { issue, invalidFields } = this.state;
-    const validationMessage = Object.keys(invalidFields).length === 0 ? null : (
-      <div className="error">Please correct invalid fields before submitting</div>
-    );
+    const { issue, invalidFields, showingValidation } = this.state;
+    let validationMessage = null;
+    if (Object.keys(invalidFields).length !== 0 && showingValidation) {
+      validationMessage = (
+        <Alert bsStyle="danger" onDismiss={this.dismissValidation}>
+          Please correct invalid fields before submitting.
+        </Alert>
+      );
+    }
+
     return (
       <Panel id="edit-issue-panel">
         <Panel.Heading>
@@ -192,8 +210,10 @@ export default class IssueEdit extends React.Component {
               </ButtonToolbar>
             </Col>
           </FormGroup>
+          <FormGroup>
+            <Col smOffset={3} sm={9}>{validationMessage}</Col>
+          </FormGroup>
         </Form>
-        {validationMessage}
       </Panel>
     );
   }
