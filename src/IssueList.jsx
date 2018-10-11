@@ -7,7 +7,6 @@ import {
 } from 'react-bootstrap';
 import 'whatwg-fetch';
 
-import IssueAdd from './IssueAdd';
 import IssueFilter from './IssueFilter';
 import Toast from './Toast';
 
@@ -80,7 +79,6 @@ export default class IssueList extends React.Component {
       toastMessage: '',
       toastType: 'success',
     };
-    this.createIssue = this.createIssue.bind(this);
     this.setFilter = this.setFilter.bind(this);
     this.deleteIssue = this.deleteIssue.bind(this);
     this.showError = this.showError.bind(this);
@@ -139,32 +137,6 @@ export default class IssueList extends React.Component {
     });
   }
 
-  createIssue(newIssue) {
-    fetch('/api/issues', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(newIssue),
-    }).then((response) => {
-      if (response.ok) {
-        response.json().then((updatedIssue) => {
-          updatedIssue.created = new Date(updatedIssue.created);
-          if (updatedIssue.completionDate) {
-            updatedIssue.completionDate = new Date(updatedIssue.completionDate);
-          }
-          const { issues } = this.state;
-          const newIssues = issues.concat(updatedIssue);
-          this.setState({ issues: newIssues });
-        });
-      } else {
-        response.json().then((error) => {
-          this.showError(`Failed to add issue: ${error.message}`);
-        });
-      }
-    }).catch((err) => {
-      this.showError(`Error in sending data to server: ${err.message}`);
-    });
-  }
-
   deleteIssue(id) {
     fetch(`/api/issues/${id}`, { method: 'DELETE' }).then((response) => {
       if (!response.ok) this.showError('Failed to delete issue');
@@ -207,7 +179,6 @@ export default class IssueList extends React.Component {
           </Panel.Collapse>
         </Panel>
         <IssueTable issues={issues} deleteIssue={this.deleteIssue} />
-        <IssueAdd createIssue={this.createIssue} />
         <Toast
           showing={toastVisible}
           bsStyle={toastType}
