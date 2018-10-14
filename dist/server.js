@@ -16,9 +16,9 @@ var _bodyParser = require('body-parser');
 
 var _bodyParser2 = _interopRequireDefault(_bodyParser);
 
-var _path = require('path');
+var _renderedPageRouter = require('./renderedPageRouter');
 
-var _path2 = _interopRequireDefault(_path);
+var _renderedPageRouter2 = _interopRequireDefault(_renderedPageRouter);
 
 var _issue = require('./issue');
 
@@ -161,9 +161,7 @@ app.delete('/api/issues/:id', (req, res) => {
   });
 });
 
-app.get('*', (req, res) => {
-  res.sendFile(_path2.default.resolve('static/index.html'));
-});
+app.use('/', _renderedPageRouter2.default);
 
 const port = process.env.PORT || 8080;
 

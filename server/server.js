@@ -3,7 +3,7 @@ import 'babel-polyfill';
 import express from 'express';
 import { MongoClient, ObjectId } from 'mongodb';
 import bodyParser from 'body-parser';
-import path from 'path';
+import renderedPageRouter from './renderedPageRouter';
 import Issue from './issue';
 
 const app = express();
@@ -169,9 +169,7 @@ app.delete('/api/issues/:id', (req, res) => {
   });
 });
 
-app.get('*', (req, res) => {
-  res.sendFile(path.resolve('static/index.html'));
-});
+app.use('/', renderedPageRouter);
 
 const port = process.env.PORT || 8080;
 

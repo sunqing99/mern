@@ -2,9 +2,9 @@
 const path = require('path');
 
 module.exports = {
-  mode: 'production',
+  mode: 'none',
   entry: {
-    app: ['./src/App.jsx'],
+    app: ['./client/Client.jsx'],
     vendor: [
       'react',
       'react-dom',
